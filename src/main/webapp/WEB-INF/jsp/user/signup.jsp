@@ -20,13 +20,13 @@
 		<section class="contents d-flex justify-content-center">
 			<div class="join-box my-5">
 				<h2 class="text-center">회원가입</h2>
-				<input type="text" placeholder="아이디" class="form-control mt-3">
-				<input type="password" placeholder="비밀번호" class="form-control mt-2">
-				<input type="password" placeholder="비밀번화 확인" class="form-control mt-2">
-				<input type="text" placeholder="이름" class="form-control mt-2">
-				<input type="text" placeholder="이메일" class="form-control mt-2">
+				<input type="text" placeholder="아이디" class="form-control mt-3" id="loginIdInput">
+				<input type="password" placeholder="비밀번호" class="form-control mt-2" id="passwordInput">
+				<input type="password" placeholder="비밀번화 확인" class="form-control mt-2" id="passwordConfirmInput">
+				<input type="text" placeholder="이름" class="form-control mt-2" id="nameInput">
+				<input type="text" placeholder="이메일" class="form-control mt-2" id="emailInput">
 				
-				<button type="button" class="btn btn-primary btn-block mt-2">가입</button>
+				<button type="button" class="btn btn-primary btn-block mt-2" id="joinBtn">가입</button>
 			
 			</div>
 		</section>
@@ -34,6 +34,69 @@
 		
 	
 	</div>
+	<script>
+		$(document).ready(function() {
+			
+			$("#joinBtn").on("click", function() {
+				
+				let loginId = $("#loginIdInput").val();
+				let password = $("#passwordInput").val();
+				let passwordConfirm = $("#passwordConfirmInput").val();
+				let name = $("#nameInput").val();
+				let email = $("#emailInput").val();
+				
+				if(loginId == "") {
+					alert("아이디를 입력해주세요");
+					return ;
+				}
+				
+				if(password == "") {
+					alert("비밀번호를 입력해주세요");
+					return ;
+				}
+				
+				if(password != passwordConfirm) {
+					alert("비밀번호가 일치하지 않습니다");
+					return ;
+				}
+				
+				if(name == "") {
+					alert("이름을 입력하세요");
+					return ;
+				}
+				
+				if(email == "") {
+					alert("이메일을 입력하세요");
+					return ;
+				}
+				
+				// 회원 가입 api 호출
+				$.ajax({
+					type:"post"
+					, url:"/user/signup"
+					, data:{"loginId":loginId, "password":password, "name":name, "email":email}
+					, success:function(data) {
+						if(data.result == "success") {
+							location.href = "/user/signin/view";
+						} else {
+							alert("회원가입 실패");
+						}
+					}
+					, error:function() {
+						alert("회원가입 에러");
+					}
+				});
+				
+				
+				
+				
+				
+			});
+			
+		});
+	
+	</script>
+	
 
 </body>
 </html>
